@@ -1,0 +1,138 @@
+﻿@model IEnumerable<Csharp_Cumulative_Assignment_1.Models.Teacher>
+
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    /* Basic Styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .form-container {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    form {
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+    .form-group {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        margin-right: 5px;
+    }
+
+    .form-group input {
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 150px;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    .teacher-list {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .teacher-item {
+        background-color: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .teacher-item:hover {
+        background-color: #f0f0f0;
+    }
+
+    .teacher-item a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .teacher-item span {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+
+    .no-teachers-message {
+        text-align: center;
+        color: #777;
+        font-size: 16px;
+    }
+</style>
+
+<div class="container">
+    <h2>List of Teachers</h2>
+
+    <!-- Search Form for Hire Date -->
+    <div class="form-container">
+        <form method="get" action="/TeacherPage/List">
+            <div class="form-group">
+                <label for="hireDate">Search by Hire Date:</label>
+                <input type="date" id="startDate" name="startDate" />
+                <input type="date" id="endDate" name="endDate" />
+            </div>
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="teacher-list">
+            @foreach (var teacher in Model)
+            {
+                <div class="teacher-item">
+                    <a href="/TeacherPage/Show/@teacher.TeacherId">@teacher.TeacherFName @teacher.TeacherLName</a>
+                    <span>@teacher.TeacherHireDate.ToString("MM/dd/yyyy")</span>
+                </div>
+            }
+        </div>
+    }
+
+</div>

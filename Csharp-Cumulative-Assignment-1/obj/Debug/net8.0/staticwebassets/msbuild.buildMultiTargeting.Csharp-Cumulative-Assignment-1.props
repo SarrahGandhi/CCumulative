@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Csharp-Cumulative-Assignment-1.props" />
+</Project>
