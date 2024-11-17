@@ -23,14 +23,13 @@ namespace SchoolApp.Controllers
 
 
         /// <summary>
-        /// When we click on Teachers in Navigation bar on Home page, We are directed to a webpage that lists all teachers in the database school
+        /// Retrieves a list of all courses available in the database.
         /// </summary>
         /// <example>
-        /// GET api/Teacher/ListTeachers -> [{"TeacherFname":"Manik", "TeacherLName":"Bansal"},{"TeacherFname":"Asha", "TeacherLName":"Bansal"},.............]
-        /// GET api/Teacher/ListTeachers -> [{"TeacherFname":"Apurva", "TeacherLName":"Gupta"},{"TeacherFname":"Himani", "TeacherLName":"Garg"},.............]
+        /// GET api/CourseAPI/ListCourses
         /// </example>
         /// <returns>
-        /// A list all the teachers in the database school
+        /// A list of courses, each with properties like CourseId, CourseCode, TeacherId, StartDate, FinishDate, and CourseName.
         /// </returns>
 
 
@@ -96,6 +95,18 @@ namespace SchoolApp.Controllers
             //Return the final list of Teachers 
             return Courses;
         }
+
+        /// <summary>
+        /// Finds a specific course by its unique CourseId.
+        /// </summary>
+        /// <param name="id">The unique ID of the course to find.</param>
+        /// <example>
+        /// GET api/CourseAPI/FindCourse/1
+        /// </example>
+        /// <returns>
+        /// The details of the course with the specified ID, or a 404 status if not found.
+        /// </returns>
+        /// 
         [HttpGet]
         [Route(template: "FindCourse/{id}")]
         public ActionResult<Course> FindCourse(int id)
@@ -144,7 +155,16 @@ namespace SchoolApp.Controllers
             return NotFound($"Course with ID {id} not found.");
         }
 
-
+        /// <summary>
+        /// Finds a specific course by the TeacherId associated with it.
+        /// </summary>
+        /// <param name="id">The unique ID of the teacher.</param>
+        /// <example>
+        /// GET api/CourseAPI/FindCourseByTeacherId/3
+        /// </example>
+        /// <returns>
+        /// The details of the course taught by the specified teacher, or a 404 status if not found.
+        /// </returns>
 
         [HttpGet]
         [Route(template: "FindCourseByTeacherId/{id}")]

@@ -10,27 +10,34 @@ namespace SchoolApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class StudentAPIController : ControllerBase
     {
 
         // This is dependancy injection
         private readonly SchoolDbContext _schoolcontext;
+        // <summary>
+        /// Initializes a new instance of the StudentAPIController with the provided database context.
+        /// </summary>
+        /// <param name="schoolcontext">The database context for accessing the school database.</param>
         public StudentAPIController(SchoolDbContext schoolcontext)
         {
             _schoolcontext = schoolcontext;
         }
+
         /// <summary>
-        /// When we click on Teachers in Navigation bar on Home page, We are directed to a webpage that lists all teachers in the database school
+        /// Retrieves a list of all students in the database.
         /// </summary>
         /// <example>
-        /// GET api/Teacher/ListTeachers -> [{"TeacherFname":"Manik", "TeacherLName":"Bansal"},{"TeacherFname":"Asha", "TeacherLName":"Bansal"},.............]
-        /// GET api/Teacher/ListTeachers -> [{"TeacherFname":"Apurva", "TeacherLName":"Gupta"},{"TeacherFname":"Himani", "TeacherLName":"Garg"},.............]
+        /// Request: GET api/StudentAPI/ListStudents  
+        /// 
+        /// Response:
+        /// [
+        /// ]
         /// </example>
         /// <returns>
-        /// A list all the teachers in the database school
+        /// A list of all students, including their ID, first name, last name, enrollment date, and student number.
         /// </returns>
-
-
         [HttpGet]
         [Route(template: "ListStudents")]
         public List<Student> ListStudents()
@@ -92,6 +99,20 @@ namespace SchoolApp.Controllers
             //Return the final list of Teachers 
             return Students;
         }
+        /// <summary>
+        /// Finds and retrieves the details of a specific student by their ID.
+        /// </summary>
+        /// <param name="id">The unique ID of the student to retrieve. Example: 1</param>
+        /// <example>
+        /// Request: GET api/StudentAPI/FindStudent/1  
+        /// 
+
+        /// If the ID does not exist:
+        /// Response: 404 Not Found - "Student with ID 1 not found."
+        /// </example>
+        /// <returns>
+        /// A single student's details if found
+        /// </returns>
 
         [HttpGet]
         [Route(template: "FindStudent/{id}")]

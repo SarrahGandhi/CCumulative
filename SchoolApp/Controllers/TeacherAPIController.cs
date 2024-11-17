@@ -15,6 +15,11 @@ namespace SchoolApp.Controllers
 
         // This is dependancy injection
         private readonly SchoolDbContext _schoolcontext;
+        /// <summary>
+        /// Initializes a new instance of the TeacherAPIController with the provided database context.
+        /// </summary>
+        /// <param name="schoolcontext">The database context for accessing school data.</param>
+
         public TeacherAPIController(SchoolDbContext schoolcontext)
         {
             _schoolcontext = schoolcontext;
@@ -22,15 +27,18 @@ namespace SchoolApp.Controllers
 
 
         /// <summary>
-        /// When we click on Teachers in Navigation bar on Home page, We are directed to a webpage that lists all teachers in the database school
+        /// Retrieves a list of all teachers in the database.
         /// </summary>
         /// <example>
-        /// GET api/Teacher/ListTeachers -> [{"TeacherFname":"Manik", "TeacherLName":"Bansal"},{"TeacherFname":"Asha", "TeacherLName":"Bansal"},.............]
-        /// GET api/Teacher/ListTeachers -> [{"TeacherFname":"Apurva", "TeacherLName":"Gupta"},{"TeacherFname":"Himani", "TeacherLName":"Garg"},.............]
+        /// Example usage:
+        /// GET: api/TeacherAPI/ListTeachers  
+        /// Response: 
+        /// [
+        ///   {"TeacherFName":"John", "TeacherLName":"Doe"},
+        ///   {"TeacherFName":"Jane", "TeacherLName":"Doe"}
+        /// ]
         /// </example>
-        /// <returns>
-        /// A list all the teachers in the database school
-        /// </returns>
+        /// <returns>A list of all teachers in the database.</returns>
 
 
         [HttpGet]
@@ -99,16 +107,25 @@ namespace SchoolApp.Controllers
 
 
         /// <summary>
-        /// When we select one teacher , it returns information of the selected Teacher in the database by their ID 
+        /// Retrieves details of a specific teacher by their ID.
         /// </summary>
+        /// <param name="id">The unique identifier of the teacher.</param>
         /// <example>
-        /// GET api/Teacher/FindTeacher/3 -> {"TeacherId":3,"TeacherFname":"Sam","TeacherLName":"Cooper"}
+        /// Example usage:
+        /// GET: api/TeacherAPI/FindTeacher/3  
+        /// Response: 
+        /// {
+        ///   "TeacherId": 3,
+        ///   "TeacherFName": "Sam",
+        ///   "TeacherLName": "Cooper",
+        ///   "EmployeeNumber": "EMP123",
+        ///   "TeacherHireDate": "2023-09-01T00:00:00",
+        ///   "TeacherSalary": 60000.00
+        /// }
         /// </example>
         /// <returns>
-        /// Information about the Teacher selected
+        /// An ActionResult containing the teacher's details if found; otherwise, a NotFound response.
         /// </returns>
-
-
 
         [HttpGet]
         [Route(template: "FindTeacher/{id}")]

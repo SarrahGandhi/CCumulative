@@ -5,53 +5,50 @@ namespace SchoolApp.Controllers
 {
     public class StudentPageController : Controller
     {
-
-        // API is responsible for gathering the information from the Database and MVC is responsible for giving an HTTP response
-        // as a web page that shows the information written in the View
-
-        // In practice, both the StudentAPI and StudentPage controllers
-        // should rely on a unified "Service", with an explicit interface
-
         private readonly StudentAPIController _api;
-
+        /// <summary>
+        /// Initializes a new instance of the StudentPageController with the provided StudentAPIController.
+        /// </summary>
+        /// <param name="api">The API controller used for retrieving student data from the database.</param>
         public StudentPageController(StudentAPIController api)
         {
             _api = api;
         }
-
+        /// <summary>
+        /// Displays a web page listing all students retrieved from the database.
+        /// </summary>
+        /// <example>
+        /// GET: /StudentPage/ListStudent  
+        /// Displays a list of all students in the database.
+        /// </example>
+        /// <returns>
+        /// A view containing the list of all students in the database.
+        /// </returns>
         public IActionResult ListStudent()
         {
             List<Student> Students = _api.ListStudents();
-
-
-
             return View(Students);
-
-
         }
         /// <summary>
-        /// When we click on the Students button in Navugation Bar, it returns the web page displaying all the teachers in the Database student
+        /// Displays details of a specific student based on the provided student ID.
         /// </summary>
-        /// <returns>
-        /// List of all Students in the Database student
-        /// </returns>
+        /// <param name="id">The unique identifier of the student. Example: 1</param>
         /// <example>
-        /// GET : api/StudentPage/List  ->  Gives the list of all Students in the Database student
+        /// GET: /StudentPage/ShowStudent/1  
+        /// Displays the details of the student with ID 1.
         /// </example>
-
+        /// <returns>
+        /// A view containing the details of the requested student, or a null view if the student is not found.
+        /// </returns>
         public IActionResult ShowStudent(int id)
         {
             ActionResult<Student> Studentresult = _api.FindStudent(id);
             if (Studentresult.Result is ObjectResult objectResult && objectResult.Value is Student student)
             {
-                return View(student); // Pass the teacher object to the view
+                return View(student);
             }
-            return View(null);  // Pass the teacher object to the view
-                                // If no teacher was found, return NotFound response
-
-            // If the teacher is found, return the Teacher object
-
-
+            // If no student is found, return a null view
+            return View(null);
         }
     }
 }

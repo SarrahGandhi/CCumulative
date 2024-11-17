@@ -3,14 +3,19 @@ using SchoolApp.Models;
 
 namespace SchoolApp.Controllers
 {
+    /// <summary>
+    /// The CoursePageController is an MVC controller responsible for rendering web pages related to courses.
+    /// It interacts with the CourseAPIController to fetch data from the database using API methods and 
+    /// presents that data in the form of web pages through views.
+    /// </summary>
     public class CoursePageController : Controller
     {
 
-        // API is responsible for gathering the information from the Database and MVC is responsible for giving an HTTP response
-        // as a web page that shows the information written in the View
+        /// <summary>
+        /// Initializes a new instance of the CoursePageController with an injected CourseAPIController.
+        /// </summary>
+        /// <param name="api">An instance of CourseAPIController for interacting with the database.</param>
 
-        // In practice, both the StudentAPI and StudentPage controllers
-        // should rely on a unified "Service", with an explicit interface
 
         private readonly CourseAPIController _api;
 
@@ -19,23 +24,49 @@ namespace SchoolApp.Controllers
             _api = api;
         }
 
-
         /// <summary>
-        /// When we click on the Students button in Navugation Bar, it returns the web page displaying all the teachers in the Database student
+        /// Displays a webpage with a list of all courses in the database.
         /// </summary>
-        /// <returns>
-        /// List of all Students in the Database student
-        /// </returns>
         /// <example>
-        /// GET : api/StudentPage/List  ->  Gives the list of all Students in the Database student
+        /// Input:
+        /// User clicks on the "Courses" button in the navigation bar.
+        /// 
+        /// Result:
+        /// A webpage is rendered displaying the course list:
+        /// 
+        /// Internally, the method:
+        /// - Calls the `ListCourses` method from the CourseAPIController.
+        /// - Passes the retrieved list of courses to the associated view.
         /// </example>
-
+        /// <returns>
+        /// A view displaying a list of all courses in the database.
+        /// </returns>
         public IActionResult ListCourse()
         {
             List<Course> Courses = _api.ListCourses();
             return View(Courses);
 
         }
+        /// <summary>
+        /// Displays a webpage showing the details of a specific course based on its ID.
+        /// </summary>
+        /// <param name="id">The unique identifier of the course. Example: 1</param>
+        /// <example>
+        /// Input:
+        /// User navigates to `api/CoursePage/ShowCourse/1`.
+        /// 
+        /// Internally, the method:
+        /// - Calls the `FindCourse` method from the CourseAPIController with the specified ID.
+        /// - If the course is found, its details are passed to the associated view.
+        /// - If the course is not found, a webpage is rendered showing no details or an error message.
+        /// 
+        /// 
+        /// If the ID is invalid or not found:
+        /// - A webpage is displayed with an appropriate message, e.g., "Course not found."
+        /// </example>
+        /// <returns>
+        /// A view displaying the details of the specified course if found, or an empty view otherwise.
+        /// </returns>
         public IActionResult ShowCourse(int id)
         {
             ActionResult<Course> Courseresult = _api.FindCourse(id);

@@ -1,30 +1,41 @@
 ﻿namespace SchoolApp.Models
 {
 
-    // Created Teacher Class which is a definition to define the properties of the Teacher
-    // This definition is used to create objects
-    // The properties of that object is then accessed which are sent to view to display on the webpage
-    // Here, Teacher Class is created and the definition mentions that it has 6 properties (TeacherId, TeacherFName,
-    // TeacherLName, TeacherHireDate, EmployeeNumber, TeacherSalary which are accessed in Controller and then return
-    // to View to display that properties information on the web page
-
+    /// <summary>
+    /// Represents a course with its associated properties.
+    /// This class serves as a blueprint to create course objects, which can then be used to manage course-related data.
+    /// </summary>
 
     public class Course
     {
-        // Unique identifier for each teacher. It is used as the primary key in a database.
+        /// <summary>
+        /// Unique identifier for each course. Used as the primary key in the database.
+        /// </summary>        
         public int CourseId { get; set; }
 
-        // First name of the teacher. It stores the teacher's first name as a string.
+        /// <summary>
+        /// The unique code for the course (e.g., "CS101"). Helps identify the course uniquely.
+        /// </summary>        
         public string? CourseCode { get; set; }
 
-        // Last name of the teacher. It stores the teacher's last name as a string.
+        /// <summary>
+        /// The ID of the teacher assigned to the course. Links the course to a specific teacher.
+        /// </summary>        
         public int TeacherId { get; set; }
 
-        // The date when the teacher was hired. It is used to track employment start date.
+        // <summary>
+        /// The date when the course starts.
+        /// </summary>
         public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// The date when the course ends.
+        /// </summary>
         public DateTime FinishDate { get; set; }
 
-        // It is a unique employee number assigned to each teacher. 
+        /// <summary>
+        /// The full name of the course (e.g., "Introduction to Programming").
+        /// </summary>
         public string? CourseName { get; set; }
 
         // It is the salary of the teacher. It is stored as a decimal to accommodate monetary values.

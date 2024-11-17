@@ -2,6 +2,9 @@
 
 namespace SchoolApp.Models
 {
+    /// <summary>
+    /// Provides database connection functionality for the School database.
+    /// </summary>
     public class SchoolDbContext
     {
         // Input the details of the username, password, server, and port number to connect the server to the database
@@ -10,14 +13,14 @@ namespace SchoolApp.Models
         private static string Database { get { return "school"; } }
         private static string Server { get { return "localhost"; } }
         private static string Port { get { return "3306"; } }
-
-        // ConnectionString is a series of credentials which is used to connect to the database
+        /// <summary>
+        /// Constructs the connection string using the provided credentials and database settings.
+        /// </summary>
         protected static string ConnectionString
         {
             get
             {
-                // convert zero datetime is a db connection setting which returns NULL if the date is 0000-00-00
-                // which allows interpretation of the date in Csharp
+                // The "convert zero datetime" option is used to handle dates like 0000-00-00 in MySQL.
 
                 return "server = " + Server
                     + "; user = " + User
@@ -30,15 +33,14 @@ namespace SchoolApp.Models
 
 
 
-        /// We use this method to get Database
         /// <summary>
-        /// It returns a connection to the Database
+        /// Creates and returns a connection to the database.
         /// </summary>
         /// <example>
-        /// private SchoolDbContext Teachers = new SchoolDbContext();
-        /// MySqlConnection Connection = Teachers.AccessDatabase();
+        /// var dbContext = new SchoolDbContext();
+        /// MySqlConnection connection = dbContext.AccessDatabase();
         /// </example>
-        /// <returns>A MySqlConnection Object</returns>
+        /// <returns>A <see cref="MySqlConnection"/> object representing the database connection.</returns>
         public MySqlConnection AccessDatabase()
         {
             // We are giving instance to SchoolDbContext class to create an object
