@@ -1,0 +1,130 @@
+@model IEnumerable<SchoolApp.Models.Course>
+
+<!-- Displaying all the coursess on the web page from where you can select any courses  -->
+@{
+    Layout = "_Layout";
+}
+<div class="container">
+    <h2>Our Courses</h2>
+    @if (Model != null && Model.Any())
+    {
+        <div class="course-list">
+            @foreach (var courses in Model)
+            {
+                <div class="course-item">
+
+                    <a href="ShowCourse/@courses.CourseId">@courses.CourseName @courses.CourseCode</a>
+                    <span class="start">@courses.StartDate.ToString("MM/dd/yyyy")</span>
+                    <span class="finish">@courses.FinishDate.ToString("MM/dd/yyyy")</span>
+
+                </div>
+            }
+
+        </div>
+    }
+</div>
+
+
+<style>
+    /* Basic Styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .form-container {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    form {
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+    .form-group {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        margin-right: 5px;
+    }
+
+    .form-group input {
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 150px;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    .course-list {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .course-item {
+        background-color: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .course-item:hover {
+        background-color: #f0f0f0;
+    }
+
+    .course-item a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .course-item span {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+
+
+    .no-student-message {
+        text-align: center;
+        color: #777;
+        font-size: 16px;
+    }
+</style>

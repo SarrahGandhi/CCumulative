@@ -1,0 +1,94 @@
+@model SchoolApp.Models.Course
+
+<div class="courses-details-container">
+
+    <!-- Displaying the details of the selected courses -->
+    @if (Model != null)
+    {
+        <h1 class="courses-name">courses Name : <span class="=value">@Model.CourseName </span></h1>
+        <p class="courses-detail">courses Code : <span class="=value">@Model.CourseCode</span></p>
+        <p class="courses-detail">Start Date : <span class="=value">@Model.StartDate.ToString("yyyy-M-d")</span></p>
+        <p class="courses-detail">End Date : <span class="value">@Model.FinishDate.ToString("yyyy-M-d")</span>
+
+        </p>
+    }
+    else
+    {
+        <div class="error-message">
+            <p>Course not Found</p>
+        </div>
+    }
+    <a href="/CoursePage/ListCourse" class="back-button">Back to Course List</a>
+</div>
+
+<style>
+    /* Basic styling for teacher details */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: white;
+        using Mysqlx;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    p {
+        font-size: 18px;
+        color: #555;
+        line-height: 1.5;
+        margin: 10px 0;
+    }
+
+    .course-detail {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 18px;
+    }
+
+    .course-detail label {
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+
+
+    .back-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+
+    .courses-detail,
+    .courses-name {
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    .value {
+        color: #555;
+    }
+</style>

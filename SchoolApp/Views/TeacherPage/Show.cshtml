@@ -1,0 +1,113 @@
+﻿@{
+
+    var course = ViewData["Course"] as SchoolApp.Models.Course;
+    var teacher = ViewData["Teacher"] as SchoolApp.Models.Teacher;
+
+}
+
+<style>
+    /* Basic styling for teacher details */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: white;
+        using Mysqlx;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    p {
+        font-size: 18px;
+        color: #555;
+        line-height: 1.5;
+        margin: 10px 0;
+    }
+
+    .teacher-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 18px;
+    }
+
+    .teacher-details .label,
+    .Course-detail .label {
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    .teacher-details .value {
+        color: #555;
+    }
+
+    .back-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container">
+    @if (teacher == null)
+    {
+        <div class="error-message">
+            <p>Teacher not found.</p>
+        </div>
+    }
+
+    else
+    {
+        <h1>@teacher.TeacherFName @teacher.TeacherLName</h1>
+
+        <div class="teacher-details">
+            <p><span class="label">Employee Number:</span><span class="value">@teacher.EmployeeNumber</span></p>
+            <p><span class="label">Hire Date:</span><span
+                    class="value">@teacher.TeacherHireDate.ToString("yyyy-MM-dd")</span>
+            </p>
+            <p><span class="label">Salary:</span><span class="value">@teacher.TeacherSalary.ToString("C")</span></p>
+        </div>
+        @if (course != null)
+        {
+            <h1>Courses</h1>
+            <div class="Course-detail">
+                <p><span class="label">Course Code:</span><span class="value">@course.CourseCode</span></p>
+                <p><span class="label">Course Name:</span><span class="value">@course.CourseName</span></p>
+                <p><span class="label">Course Start Date:</span><span
+                        class="value">@course.StartDate.ToString("yyyy-MM-dd")</span></p>
+                <p><span class="label">Course Finish Date</span><span
+                        class="value">@course.FinishDate.ToString("yyyy-MM-dd")</span></p>
+
+            </div>
+        }
+        else
+        {
+            <div class="error-message">
+                <p>Teacher has no courses</p>
+            </div>
+        }
+        <a href="/TeacherPage/List" class="back-button">Back to Teacher List</a>
+    }
+</div>
