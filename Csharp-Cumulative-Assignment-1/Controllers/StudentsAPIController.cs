@@ -73,11 +73,11 @@ namespace Csharp_Cumulative_Assignment_1.Controllers
                         // Assigning short names for properties of the Teacher
                         Student EachStudent = new Student()
                         {
-                            studentId = Id,
-                            studentFName = FirstName,
-                            studentLName = LastName,
-                            enrolDate = EnrollmentDate,
-                            studentNumber = StudentNumber
+                            StudentId = Id,
+                            StudentFName = FirstName,
+                            StudentLName = LastName,
+                            EnrolDate = EnrollmentDate,
+                            StudentNumber = StudentNumber
                         };
 
 

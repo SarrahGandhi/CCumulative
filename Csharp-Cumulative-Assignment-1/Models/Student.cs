@@ -12,24 +12,20 @@ namespace Csharp_Cumulative_Assignment_1.Models
     public class Student
     {
         // Unique identifier for each teacher. It is used as the primary key in a database.
-        public int studentId { get; set; }
+        public int StudentId { get; set; }
 
         // First name of the teacher. It stores the teacher's first name as a string.
-        public string? studentFName { get; set; }
+        public string? StudentFName { get; set; }
 
         // Last name of the teacher. It stores the teacher's last name as a string.
-        public string? studentLName { get; set; }
+        public string? StudentLName { get; set; }
 
         // The date when the teacher was hired. It is used to track employment start date.
-        public DateTime enrolDate { get; set; }
+        public DateTime EnrolDate { get; set; }
 
         // It is a unique employee number assigned to each teacher. 
-        public string? studentNumber { get; set; }
+        public string? StudentNumber { get; set; }
 
-        internal static void Add(Student eachStudent)
-        {
-            throw new NotImplementedException();
-        }
 
         // It is the salary of the teacher. It is stored as a decimal to accommodate monetary values.
     }

@@ -1767,11 +1767,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sarrahgandhi/Documents/SCHOOL/TeacherApp/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1.csproj",
+      "projectUniqueName": "/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1.csproj",
       "projectName": "Csharp-Cumulative-Assignment-1",
-      "projectPath": "/Users/sarrahgandhi/Documents/SCHOOL/TeacherApp/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1.csproj",
+      "projectPath": "/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1.csproj",
       "packagesPath": "/Users/sarrahgandhi/.nuget/packages/",
-      "outputPath": "/Users/sarrahgandhi/Documents/SCHOOL/TeacherApp/Csharp-Cumulative-Assignment-1/Csharp-Cumulative-Assignment-1/obj/",
+      "outputPath": "/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/Csharp-Cumulative-Assignment-1/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/sarrahgandhi/.nuget/NuGet/NuGet.Config"
