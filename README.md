@@ -25,7 +25,7 @@ Clone the project to your local machine using Git:
 
 
 ## Git Repo
-git clone https://github.com/yourusername/SchoolApp.git
+git clone https://github.com/SarrahGandhi/SchoolApp.git
 
 
 ### Set Up MySQL Database
