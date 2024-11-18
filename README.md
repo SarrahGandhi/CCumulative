@@ -34,7 +34,7 @@ Create a MySQL database named school (or use your preferred name).
 ## Update the connection string in SchoolDbContext.cs with your database credentials:
 
 private static string User { get { return "root"; } } <br>
-private static string Password { get { return "yourpassword"; } } <br>
+private static string Password { get { return ""; } } <br>
 private static string Database { get { return "school"; } } <br>
 private static string Server { get { return "localhost"; } } <br>
 private static string Port { get { return "3306"; } } <br>
