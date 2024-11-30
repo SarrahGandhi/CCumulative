@@ -166,6 +166,18 @@ namespace SchoolApp.Controllers
             }
             return NotFound($"Student with ID {id} not found.");
         }
+        /// <summary>
+        /// Adds a new student to the database.
+        /// </summary>
+        /// <param name="studentData">The student data to be added.</param>
+        /// <example>
+        /// Request: POST api/StudentAPI/AddStudent
+        /// Request Body: { "studentfname": "John", "studentlname": "Doe", "studentnumber": "N1234", "enroldate": "2023-09-01" }
+        /// Response: 201 Created with the student's ID if successful, or a validation error message if failed.
+        /// </example>
+        /// <returns>
+        /// A response with the status of the operation, including an error message if validation fails.
+        /// </returns>
         [HttpPost]
         [Route(template: "AddStudent")]
         public ActionResult<Student> AddStudent([FromBody] Student studentData)
@@ -218,6 +230,17 @@ namespace SchoolApp.Controllers
                 return Ok($"{addStudentCommand.LastInsertedId}");
             }
         }
+        /// <summary>
+        /// Deletes a student from the database by their ID.
+        /// </summary>
+        /// <param name="id">The unique ID of the student to be deleted.</param>
+        /// <example>
+        /// Request: DELETE api/StudentAPI/DeleteStudent/1
+        /// Response: 200 OK with a success message if the student was deleted, or a "Not Found" error if the student doesn't exist.
+        /// </example>
+        /// <returns>
+        /// A response indicating whether the student was successfully deleted or not.
+        /// </returns>
         [HttpDelete]
         [Route(template: "DeleteStudent/{id}")]
         public ActionResult<Student> DeleteStudent(int id)

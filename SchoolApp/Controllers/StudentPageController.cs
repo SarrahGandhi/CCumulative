@@ -50,12 +50,34 @@ namespace SchoolApp.Controllers
             // If no student is found, return a null view
             return View(null);
         }
+        /// <summary>
+        /// Displays the form to create a new student, with optional error message.
+        /// </summary>
+        /// <param name="error">Optional error message to display when form submission fails.</param>
+        /// <example>
+        /// GET: /StudentPage/NewStudent  
+        /// Displays the form to create a new student.
+        /// </example>
+        /// <returns>
+        /// A view displaying the form for creating a new student.
+        /// </returns>
         [HttpGet]
         public IActionResult NewStudent(string? error)
         {
             ViewData["Error"] = error;
             return View();
         }
+        /// <summary>
+        /// Creates a new student and redirects to the student details page.
+        /// </summary>
+        /// <param name="NewStudent">The student data to be added.</param>
+        /// <example>
+        /// POST: /StudentPage/CreateStudent  
+        /// Submits the student creation form and redirects to the student details.
+        /// </example>
+        /// <returns>
+        /// A redirect to the details page of the newly created student.
+        /// </returns>
         [HttpPost]
         public IActionResult CreateStudent(Student NewStudent)
         {
@@ -69,6 +91,17 @@ namespace SchoolApp.Controllers
             return RedirectToAction("NewStudent", new { error = result.Value });
 
         }
+        /// <summary>
+        /// Displays a confirmation page for deleting a student.
+        /// </summary>
+        /// <param name="id">The ID of the student to confirm deletion.</param>
+        /// <example>
+        /// GET: /StudentPage/ConfirmDeleteStudent/1  
+        /// Displays the confirmation page for deleting the student with ID 1.
+        /// </example>
+        /// <returns>
+        /// A view for confirming the deletion of the specified student.
+        /// </returns>
         [HttpGet]
         public IActionResult ConfirmDeleteStudent(int id)
         {
@@ -81,6 +114,17 @@ namespace SchoolApp.Controllers
             }
             return RedirectToAction("ListStudent");
         }
+        /// <summary>
+        /// Deletes a student and redirects to the list of all students.
+        /// </summary>
+        /// <param name="id">The ID of the student to delete.</param>
+        /// <example>
+        /// POST: /StudentPage/DeleteStudent/1  
+        /// Deletes the student with ID 1 and redirects to the student list.
+        /// </example>
+        /// <returns>
+        /// A redirect to the list of students after the deletion.
+        /// </returns>
         [HttpPost]
         public IActionResult DeleteStudent(int id)
         {

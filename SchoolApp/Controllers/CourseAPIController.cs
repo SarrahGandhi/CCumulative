@@ -214,6 +214,16 @@ namespace SchoolApp.Controllers
             }
             return NotFound($"Teacher with ID {id} not found.");
         }
+        /// <summary>
+        /// Adds a new course to the database.
+        /// </summary>
+        /// <param name="courseData">The course details to be added.</param>
+        /// <example>
+        /// POST api/CourseAPI/AddCourse
+        /// </example>
+        /// <returns>
+        /// The ID of the newly created course, or an error message if validation fails.
+        /// </returns>
         [HttpPost]
         [Route(template: "AddCourse")]
         public ActionResult<string> AddCourse([FromBody] Course courseData)
@@ -232,6 +242,10 @@ namespace SchoolApp.Controllers
             if (courseData.CourseName == null || courseData.CourseName == "")
             {
                 return BadRequest("Course Name is required");
+            }
+            if (courseData.StartDate > courseData.FinishDate)
+            {
+                return BadRequest("Start Date should be before Finish Date");
             }
             using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
             {
@@ -304,6 +318,16 @@ namespace SchoolApp.Controllers
 
             }
         }
+        /// <summary>
+        /// Deletes a course by its CourseId.
+        /// </summary>
+        /// <param name="id">The unique ID of the course to delete.</param>
+        /// <example>
+        /// DELETE api/CourseAPI/DeleteCourse/1
+        /// </example>
+        /// <returns>
+        /// A success message if deleted, or a 404 status if the course is not found.
+        /// </returns>
         [HttpDelete]
         [Route(template: "DeleteCourse/{id}")]
         public ActionResult<string> DeleteCourse(int id)

@@ -186,6 +186,26 @@ namespace SchoolApp.Controllers
             // If the teacher is found, return the Teacher object
 
         }
+        /// <summary>
+        /// Adds a new teacher to the database.
+        /// </summary>
+        /// <param name="teacherData">The teacher object containing the data to be added.</param>
+        /// <example>
+        /// Example usage:
+        /// POST: api/TeacherAPI/AddTeacher  
+        /// Request body: 
+        /// {
+        ///   "TeacherFName": "John",
+        ///   "TeacherLName": "Doe",
+        ///   "EmployeeNumber": "T001",
+        ///   "TeacherHireDate": "2024-01-01T00:00:00",
+        ///   "TeacherSalary": 50000
+        /// }
+        /// Response: 
+        /// "Teacher added successfully with ID: 1"
+        /// </example>
+        /// <returns>A string indicating the result of the add operation.</returns>
+
         [HttpPost]
         [Route(template: "AddTeacher")]
         public ActionResult<string> AddTeacher([FromBody] Teacher teacherData)
@@ -251,6 +271,17 @@ namespace SchoolApp.Controllers
             }
 
         }
+        /// <summary>
+        /// Deletes a teacher from the database by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to be deleted.</param>
+        /// <example>
+        /// Example usage:
+        /// DELETE: api/TeacherAPI/DeleteTeacher/1
+        /// Response: "Teacher with ID 1 deleted."
+        /// </example>
+        /// <returns>A string indicating the result of the delete operation.</returns>
+
         [HttpDelete]
         [Route(template: "DeleteTeacher/{id}")]
         public ActionResult<string> DeleteTeacher(int id)

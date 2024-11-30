@@ -79,12 +79,27 @@ namespace SchoolApp.Controllers
             return View(null);  // Pass the teacher object to the view
                                 // If no teacher was found, return NotFound response
         }
+        /// <summary>
+        /// Displays a page to create a new course with an optional error message.
+        /// </summary>
+        /// <param name="error">An optional error message to display if the course creation fails.</param>
+        /// <returns>
+        /// A view displaying the form to create a new course.
+        /// </returns>
         [HttpGet]
         public IActionResult NewCourse(string? error)
         {
             ViewData["Error"] = error;
             return View();
         }
+        /// <summary>
+        /// Creates a new course in the database.
+        /// </summary>
+        /// <param name="NewCourse">The course object to be added to the database.</param>
+        /// <returns>
+        /// Redirects to the "ShowCourse" action if the course is created successfully, 
+        /// or redirects to the "NewCourse" action with an error message if creation fails.
+        /// </returns>
         [HttpPost]
         public IActionResult CreateCourse(Course NewCourse)
         {
@@ -97,6 +112,14 @@ namespace SchoolApp.Controllers
             }
             return RedirectToAction("NewCourse", new { error = result.Value });
         }
+        /// <summary>
+        /// Displays a page to confirm the deletion of a course.
+        /// </summary>
+        /// <param name="id">The unique identifier of the course to be deleted.</param>
+        /// <returns>
+        /// A view displaying the course details to confirm deletion if the course is found, 
+        /// or redirects to the course list page if not found.
+        /// </returns>
         [HttpGet]
         public IActionResult ConfirmDeleteCourse(int id)
         {
@@ -109,6 +132,13 @@ namespace SchoolApp.Controllers
             return RedirectToAction("ListCourse");
 
         }
+        /// <summary>
+        /// Deletes a course from the database.
+        /// </summary>
+        /// <param name="id">The unique identifier of the course to be deleted.</param>
+        /// <returns>
+        /// Redirects to the "ListCourse" action after deleting the course.
+        /// </returns>
         [HttpPost]
         public IActionResult DeleteCourse(int id)
         {

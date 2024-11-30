@@ -66,12 +66,30 @@ namespace SchoolApp.Controllers
             // ViewData["Error"] = true;
             return View();
         }
+        /// <summary>
+        /// Displays the form to create a new teacher, with optional error message.
+        /// </summary>
+        /// <param name="error">Optional error message to display when form submission fails.</param>
+        /// <returns>A view displaying the form for creating a new teacher.</returns>
+        /// <example>
+        /// GET: /TeacherPage/New  
+        /// Displays the form to create a new teacher.
+        /// </example>
         [HttpGet]
         public IActionResult New(string? error)
         {
             ViewData["Error"] = error;
             return View();
         }
+        /// <summary>
+        /// Creates a new teacher and redirects to the teacher details page.
+        /// </summary>
+        /// <param name="NewTeacher">The teacher data to be added.</param>
+        /// <returns>A redirect to the details page of the newly created teacher.</returns>
+        /// <example>
+        /// POST: /TeacherPage/Create  
+        /// Submits the teacher creation form and redirects to the teacher details.
+        /// </example>
         [HttpPost]
         public IActionResult Create(Teacher NewTeacher)
         {
@@ -87,6 +105,15 @@ namespace SchoolApp.Controllers
 
 
         }
+        /// <summary>
+        /// Displays a confirmation page for deleting a teacher.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to confirm deletion.</param>
+        /// <returns>A view for confirming the deletion of the specified teacher.</returns>
+        /// <example>
+        /// GET: /TeacherPage/DeleteConfirm/1  
+        /// Displays the confirmation page for deleting the teacher with ID 1.
+        /// </example>
         [HttpGet]
         public IActionResult DeleteConfirm(int id)
         {
@@ -101,6 +128,15 @@ namespace SchoolApp.Controllers
 
 
         }
+        /// <summary>
+        /// Deletes a teacher and redirects to the list of all teachers.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to delete.</param>
+        /// <returns>A redirect to the list of teachers after the deletion.</returns>
+        /// <example>
+        /// POST: /TeacherPage/Delete/1  
+        /// Deletes the teacher with ID 1 and redirects to the teacher list.
+        /// </example>
         [HttpPost]
         public IActionResult Delete(int id)
         {
