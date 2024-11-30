@@ -1,0 +1,78 @@
+@{
+    var teacher = ViewData["Teacher"] as SchoolApp.Models.Teacher;
+}
+<style>
+    /* Container Styling */
+    #containershow {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    /* Navigation Link Styling */
+    .navlink {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #007bff;
+        text-decoration: none;
+        border: 1px solid #007bff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .navlink:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    /* Heading and Paragraph Styling */
+    h2 {
+        color: #333;
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #666;
+        font-size: 1em;
+        margin-bottom: 20px;
+    }
+
+    /* Button Styling */
+    .btn-warning {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-warning:hover {
+        background-color: #b52a38;
+    }
+</style>
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/TeacherPage/Show/@teacher.TeacherId">Back to Teacher</a>
+    </nav>
+    <h2>Are you sure you want to delete @teacher.TeacherFName @teacher.TeacherLName?</h2>
+    <p>This action cannot be undone.</p>
+    <form method="POST" action="/TeacherPage/Delete/@teacher.TeacherId">
+        <button class="btn-warning">
+            Confirm Delete
+        </button>
+    </form>
+</div>

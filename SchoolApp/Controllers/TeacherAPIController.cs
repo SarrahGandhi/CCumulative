@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Models;
 using System;
 using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
 
 
 
@@ -183,6 +184,90 @@ namespace SchoolApp.Controllers
             return NotFound($"Teacher with ID {id} not found.");
 
             // If the teacher is found, return the Teacher object
+
+        }
+        [HttpPost]
+        [Route(template: "AddTeacher")]
+        public ActionResult<string> AddTeacher([FromBody] Teacher teacherData)
+        {
+            string pattern = @"^T\d{3}$"; // ^ and $ ensure the entire string matches
+            Regex regex = new Regex(pattern);
+            // error handling for name
+            if (teacherData.TeacherFName == null || teacherData.TeacherLName == null || teacherData.TeacherFName == "" || teacherData.TeacherLName == "")
+            {
+                return BadRequest("Please provide a valid name for the teacher.");
+            }
+            // error handling for date
+            if (teacherData.TeacherHireDate > DateTime.Today.AddDays(1).AddTicks(-1))
+            {
+                return BadRequest("Future Date not acceptable");
+            }
+            if (teacherData.EmployeeNumber == null || teacherData.EmployeeNumber == "")
+            {
+                return BadRequest("Please provide an Employee Number");
+            }
+            if (!regex.IsMatch(teacherData.EmployeeNumber))
+            {
+                return BadRequest("Invalid Employee Number");
+            }
+            if (teacherData.TeacherSalary <= 0)
+            {
+                return BadRequest("Salary must be greater than 0");
+
+            }
+
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                //Check if teacher number is already in use
+                MySqlCommand getTeacherCommand = Connection.CreateCommand();
+                getTeacherCommand.CommandText = "select * from teachers where employeenumber=@employeenumber";
+                getTeacherCommand.Parameters.AddWithValue("@employeenumber", teacherData.EmployeeNumber);
+                var teacherCount = 0;
+                using (MySqlDataReader ResultSet = getTeacherCommand.ExecuteReader())
+                {
+                    while (ResultSet.Read())
+                    {
+                        teacherCount++;
+                    }
+                }
+
+                if (teacherCount > 0)
+                {
+                    return BadRequest("Employee Number already in use");
+                }
+
+                // Insert
+                MySqlCommand insertCommand = Connection.CreateCommand();
+                insertCommand.CommandText = "insert into teachers(teacherfname, teacherlname, employeenumber, hiredate, salary) values(@teacherfname, @teacherlname, @employeenumber, @hiredate, @salary)";
+                insertCommand.Parameters.AddWithValue("@teacherfname", teacherData.TeacherFName);
+                insertCommand.Parameters.AddWithValue("@teacherlname", teacherData.TeacherLName);
+                insertCommand.Parameters.AddWithValue("@employeenumber", teacherData.EmployeeNumber);
+                insertCommand.Parameters.AddWithValue("@hiredate", teacherData.TeacherHireDate);
+                insertCommand.Parameters.AddWithValue("@salary", teacherData.TeacherSalary);
+                insertCommand.ExecuteNonQuery();
+                return Ok($"{insertCommand.LastInsertedId}");
+
+            }
+
+        }
+        [HttpDelete]
+        [Route(template: "DeleteTeacher/{id}")]
+        public ActionResult<string> DeleteTeacher(int id)
+        {
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand Command = Connection.CreateCommand();
+                Command.CommandText = "delete from teachers where teacherid=@id";
+                Command.Parameters.AddWithValue("@id", id);
+                var rowsAffected = Command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    return NotFound($"Teacher with ID {id} not found.");
+                }
+                return Ok($"Teacher with ID {id} deleted.");
+            }
 
         }
     }

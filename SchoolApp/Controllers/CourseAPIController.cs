@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Models;
 using System;
 using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
 
 
 
@@ -213,6 +214,116 @@ namespace SchoolApp.Controllers
             }
             return NotFound($"Teacher with ID {id} not found.");
         }
+        [HttpPost]
+        [Route(template: "AddCourse")]
+        public ActionResult<string> AddCourse([FromBody] Course courseData)
+        {
+            string pattern = @"^[A-Za-z]{4}\d{4}$";
+            Regex regex = new Regex(pattern);
+            if (courseData.CourseCode == null || courseData.CourseCode == "")
+            {
+                return BadRequest("Course Code is required");
+            }
+            if (!regex.IsMatch(courseData.CourseCode))
+            {
+                return BadRequest("Course Code must be in the format of 4letter+4digit");
+
+            }
+            if (courseData.CourseName == null || courseData.CourseName == "")
+            {
+                return BadRequest("Course Name is required");
+            }
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand getCourseCommand = Connection.CreateCommand();
+                getCourseCommand.CommandText = "select * from courses where coursecode=@courseCode";
+                getCourseCommand.Parameters.AddWithValue("@courseCode", courseData.CourseCode);
+                var coursecount = 0;
+                using (MySqlDataReader ResultSet = getCourseCommand.ExecuteReader())
+                {
+                    while (ResultSet.Read())
+                    {
+                        coursecount++;
+
+                    }
+                }
+                if (coursecount > 0)
+                {
+                    return BadRequest("Course with this code already exists");
+                }
+                MySqlCommand getCourseId = Connection.CreateCommand();
+                getCourseId.CommandText = "select * from courses where courseid=@courseId";
+                getCourseId.Parameters.AddWithValue("@courseId", courseData.CourseId);
+                var courseIdCount = 0;
+                using (MySqlDataReader ResultSet = getCourseId.ExecuteReader())
+                {
+                    while (ResultSet.Read())
+                    {
+                        courseIdCount++;
+                    }
+
+                }
+                if (courseIdCount > 0)
+                {
+                    return BadRequest("Course with this id already exists");
+
+                }
+
+
+                MySqlCommand getTeacherId = Connection.CreateCommand();
+                getTeacherId.CommandText = "select * from courses where teacherid=@teacherId";
+                getTeacherId.Parameters.AddWithValue("@teacherId", courseData.TeacherId);
+                var teacherIdCount = 0;
+                using (MySqlDataReader ResultSet = getTeacherId.ExecuteReader())
+                {
+                    while (ResultSet.Read())
+                    {
+                        teacherIdCount++;
+
+                    }
+                }
+                if (teacherIdCount == 0)
+                {
+                    return BadRequest("Teacher with this id does not exist");
+
+                }
+
+
+
+                MySqlCommand addCourseCommand = Connection.CreateCommand();
+                addCourseCommand.CommandText = "insert into courses(courseid,coursecode,teacherId,startdate,finishdate,coursename) values(@courseId,@courseCode,@teacherId,@startDate,@finishDate,@courseName)";
+                addCourseCommand.Parameters.AddWithValue("@courseId", courseData.CourseId);
+                addCourseCommand.Parameters.AddWithValue("@courseCode", courseData.CourseCode);
+                addCourseCommand.Parameters.AddWithValue("@teacherId", courseData.TeacherId);
+                addCourseCommand.Parameters.AddWithValue("@startDate", courseData.StartDate);
+                addCourseCommand.Parameters.AddWithValue("@finishDate", courseData.FinishDate);
+                addCourseCommand.Parameters.AddWithValue("@courseName", courseData.CourseName);
+                addCourseCommand.ExecuteNonQuery();
+                return Ok($"{courseData.CourseId}");
+
+            }
+        }
+        [HttpDelete]
+        [Route(template: "DeleteCourse/{id}")]
+        public ActionResult<string> DeleteCourse(int id)
+        {
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand deleteCourseCommand = Connection.CreateCommand();
+                deleteCourseCommand.CommandText = "delete from courses where courseId=@courseId";
+                deleteCourseCommand.Parameters.AddWithValue("@courseId", id);
+                var rowsAffected = deleteCourseCommand.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    return NotFound($"Course with ID {id} not found.");
+                }
+                return Ok($"Course with ID {id} deleted.");
+            }
+        }
+
+
 
     }
 }

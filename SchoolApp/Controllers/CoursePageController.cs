@@ -79,6 +79,48 @@ namespace SchoolApp.Controllers
             return View(null);  // Pass the teacher object to the view
                                 // If no teacher was found, return NotFound response
         }
+        [HttpGet]
+        public IActionResult NewCourse(string? error)
+        {
+            ViewData["Error"] = error;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateCourse(Course NewCourse)
+        {
+            ActionResult<string> course = _api.AddCourse(NewCourse);
+            ObjectResult result = course.Result as ObjectResult;
+            if (result is OkObjectResult)
+            {
+                var CourseId = Convert.ToInt32(result.Value);
+                return RedirectToAction("ShowCourse", new { id = NewCourse.CourseId });
+            }
+            return RedirectToAction("NewCourse", new { error = result.Value });
+        }
+        [HttpGet]
+        public IActionResult ConfirmDeleteCourse(int id)
+        {
+            ActionResult<Course> SelectedCourse = _api.FindCourse(id);
+            if (SelectedCourse.Result is OkObjectResult objectResult && objectResult.Value is Course course)
+            {
+                ViewData["Course"] = course;
+                return View();
+            }
+            return RedirectToAction("ListCourse");
+
+        }
+        [HttpPost]
+        public IActionResult DeleteCourse(int id)
+        {
+            var course = _api.FindCourse(id);
+            if (course == null)
+            {
+                return NotFound();
+
+            }
+            ActionResult<string> CourseId = _api.DeleteCourse(id);
+            return RedirectToAction("ListCourse");
+        }
 
     }
 }

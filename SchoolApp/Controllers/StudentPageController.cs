@@ -50,5 +50,49 @@ namespace SchoolApp.Controllers
             // If no student is found, return a null view
             return View(null);
         }
+        [HttpGet]
+        public IActionResult NewStudent(string? error)
+        {
+            ViewData["Error"] = error;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateStudent(Student NewStudent)
+        {
+            ActionResult<Student> student = _api.AddStudent(NewStudent);
+            ObjectResult result = student.Result as ObjectResult;
+            if (result is OkObjectResult)
+            {
+                var StudentId = Convert.ToInt32(result.Value);
+                return RedirectToAction("ShowStudent", new { id = StudentId });
+            }
+            return RedirectToAction("NewStudent", new { error = result.Value });
+
+        }
+        [HttpGet]
+        public IActionResult ConfirmDeleteStudent(int id)
+        {
+            ActionResult<Student> SelectedStudent = _api.FindStudent(id);
+            if (SelectedStudent.Result is OkObjectResult objectResult && objectResult.Value is Student student)
+            {
+                ViewData["Student"] = student;
+                return View();
+
+            }
+            return RedirectToAction("ListStudent");
+        }
+        [HttpPost]
+        public IActionResult DeleteStudent(int id)
+        {
+            var student = _api.FindStudent(id);
+            if (student == null)
+            {
+                return NotFound();
+
+            }
+            ActionResult<Student> StudentId = _api.DeleteStudent(id);
+            return RedirectToAction("ListStudent");
+        }
     }
 }
+

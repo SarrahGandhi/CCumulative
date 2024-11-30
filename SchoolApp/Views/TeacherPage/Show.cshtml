@@ -55,7 +55,8 @@
         color: #555;
     }
 
-    .back-button {
+    .back-button,
+    .alert-warning {
         display: inline-block;
         padding: 10px 20px;
         margin-top: 20px;
@@ -65,7 +66,8 @@
         border-radius: 4px;
     }
 
-    .back-button:hover {
+    .back-button:hover,
+    .alert-warning:hover {
         background-color: #0056b3;
     }
 </style>
@@ -109,5 +111,6 @@
             </div>
         }
         <a href="/TeacherPage/List" class="back-button">Back to Teacher List</a>
+        <a class="alert-warning" href="/TeacherPage/DeleteConfirm/@teacher.TeacherId">Delete Teacher</a>
     }
 </div>

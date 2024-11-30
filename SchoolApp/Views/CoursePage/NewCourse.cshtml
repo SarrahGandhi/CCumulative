@@ -1,0 +1,122 @@
+@{
+    var error = ViewData["Error"] as string;
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    #form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 120px);
+        /* Adjust height to exclude header and footer */
+    }
+
+    #form-wrapper {
+        max-width: 500px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin: 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .error {
+        color: red;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+<header>
+    <h1>My Application</h1>
+</header>
+
+<div id="form-container">
+    <div id="form-wrapper">
+        <h1>Add a new Course</h1>
+        <form method="POST" action="/CoursePage/CreateCourse">
+            <div>
+                <label for="CourseId">Course Id: </label>
+                <input type="text" id="CourseId" name="CourseId">
+            </div>
+            <div>
+                <label for="CourseCode">Course Code: </label>
+                <input type="text" id="CourseCode" name="CourseCode">
+            </div>
+            <div>
+                <label for="TeacherId">Teacher Id: </label>
+                <input type="number" id="TeacherId" name="TeacherId">
+            </div>
+            <div>
+                <label for="StartDate">Course Start Date: </label>
+                <input type="date" id="StartDate" name="StartDate">
+            </div>
+            <div>
+                <label for="FinishDate">Course Finish Date: </label>
+                <input type="date" id="FinishDate" name="FinishDate">
+            </div>
+            <div>
+                <label for="CourseName">Course Name: </label>
+                <input type="text" id="CourseName" name="CourseName">
+            </div>
+            <div>
+                <input type="submit" value="Add Course">
+            </div>
+        </form>
+        @if (error != null)
+        {
+            <h3 class="error">Error Received: @error</h3>
+        }
+    </div>
+</div>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Models;
 using System;
 using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
 
 
 
@@ -165,8 +166,81 @@ namespace SchoolApp.Controllers
             }
             return NotFound($"Student with ID {id} not found.");
         }
+        [HttpPost]
+        [Route(template: "AddStudent")]
+        public ActionResult<Student> AddStudent([FromBody] Student studentData)
+        {
+            string pattern = @"^N\d{4}$"; // ^ and $ ensure the entire string matches
+            Regex regex = new Regex(pattern);
+            if (studentData.StudentFName == null || studentData.StudentLName == null || studentData.StudentFName == "" || studentData.StudentLName == "")
+            {
+                return BadRequest("Please enter a valid name for the student");
+
+            }
+            if (studentData.EnrolDate > DateTime.Today.AddDays(1).AddTicks(-1))
+            {
+                return BadRequest("Please enter a valid enrolment date");
+
+            }
+            if (studentData.StudentNumber == null || studentData.StudentNumber == "")
+            {
+                return BadRequest("Please enter a valid student number");
+            }
+            if (!regex.IsMatch(studentData.StudentNumber))
+            {
+                return BadRequest("Invalid Student Number");
+            }
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand getStudentCommand = Connection.CreateCommand();
+                getStudentCommand.CommandText = "select * from students where studentnumber=@number";
+                getStudentCommand.Parameters.AddWithValue("@number", studentData.StudentNumber);
+                var studentCount = 0;
+                using (MySqlDataReader reader = getStudentCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        studentCount++;
+                    }
+                }
+                if (studentCount > 0)
+                {
+                    return BadRequest("Student already exists");
+                }
+                MySqlCommand addStudentCommand = Connection.CreateCommand();
+                addStudentCommand.CommandText = "insert into students (studentfname,studentlname,studentnumber,enroldate) values (@fname,@lname,@number,@date)";
+                addStudentCommand.Parameters.AddWithValue("@fname", studentData.StudentFName);
+                addStudentCommand.Parameters.AddWithValue("@lname", studentData.StudentLName);
+                addStudentCommand.Parameters.AddWithValue("@number", studentData.StudentNumber);
+                addStudentCommand.Parameters.AddWithValue("@date", studentData.EnrolDate);
+                addStudentCommand.ExecuteNonQuery();
+                return Ok($"{addStudentCommand.LastInsertedId}");
+            }
+        }
+        [HttpDelete]
+        [Route(template: "DeleteStudent/{id}")]
+        public ActionResult<Student> DeleteStudent(int id)
+        {
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand deleteStudentCommand = Connection.CreateCommand();
+                deleteStudentCommand.CommandText = "delete from students where studentid=@id";
+                deleteStudentCommand.Parameters.AddWithValue("@id", id);
+                var studentCount = deleteStudentCommand.ExecuteNonQuery();
+                if (studentCount == 0)
+                {
+                    return NotFound($"Student with ID {id} not found.");
+                }
+                return Ok($"Student with ID {id} deleted.");
+            }
+        }
 
 
     }
 }
+
+
+
 

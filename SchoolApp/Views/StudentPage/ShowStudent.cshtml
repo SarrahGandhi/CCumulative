@@ -18,6 +18,7 @@
 
 
     <a href="/StudentPage/ListStudent" class="back-button">Back to Student List</a>
+    <a class="alert-warning" href="/StudentPage/ConfirmDeleteStudent/@Model.StudentId">Delete Student</a>
 </div>
 
 <style>
@@ -69,7 +70,8 @@
         color: #555;
     }
 
-    .back-button {
+    .back-button,
+    .alert-warning {
         display: inline-block;
         padding: 10px 20px;
         margin-top: 20px;
@@ -79,7 +81,8 @@
         border-radius: 4px;
     }
 
-    .back-button:hover {
+    .back-button:hover,
+    .alert-warning:hover {
         background-color: #0056b3;
     }
 </style>
