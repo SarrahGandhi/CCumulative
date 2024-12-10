@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Models;
 
@@ -46,26 +47,25 @@ namespace SchoolApp.Controllers
 
         public IActionResult Show(int id)
         {
+            // Fetch the teacher
             ActionResult<Teacher> result = _api.FindTeacher(id);
-
             if (result.Result is ObjectResult objectResult && objectResult.Value is Teacher teacher)
             {
                 ViewData["Teacher"] = teacher;
 
-                //i want to access the Findcourse method in the teacherAPIController
-                ActionResult<Course> courseResult = _courses.FindCourseByTeacherId(id);
-                if (courseResult.Result is ObjectResult objectCourseResult && objectCourseResult.Value is Course course)
-
+                // Fetch the courses for the teacher
+                ActionResult<List<Course>> coursesResult = _courses.FindCoursesByTeacherId(id);
+                if (coursesResult.Result is ObjectResult coursesObjectResult && coursesObjectResult.Value is List<Course> courses)
                 {
-
-                    ViewData["Course"] = course;
-                    // ViewData["Error"] = false;
+                    ViewData["Courses"] = courses;
                     return View();
                 }
             }
-            // ViewData["Error"] = true;
+
+            // Handle the case where teacher or courses are not found
             return View();
         }
+
         /// <summary>
         /// Displays the form to create a new teacher, with optional error message.
         /// </summary>
@@ -148,5 +148,104 @@ namespace SchoolApp.Controllers
             ActionResult<string> TeacherId = _api.DeleteTeacher(id);
             return RedirectToAction("List");
         }
+        [HttpGet]
+        public IActionResult Edit(int id, string? error)
+        {
+            ViewData["Error"] = error;
+            ActionResult<Teacher> teacher = _api.FindTeacher(id);
+            if (teacher.Result is ObjectResult objectResult && objectResult.Value is Teacher teacherResult)
+            {
+                ViewData["Teacher"] = teacherResult;
+            }
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Update(int id, Teacher NewTeacher)
+        {
+            ActionResult<string> teacher = _api.UpdateTeacher(id, NewTeacher);
+            ObjectResult objectResult = teacher.Result as ObjectResult;
+            if (objectResult is OkObjectResult)
+            {
+                var resultString = objectResult.Value?.ToString();
+                var match = Regex.Match(resultString, @"\d+");
+                if (match.Success)
+                {
+                    var TeacherId = Convert.ToInt32(match.Value);
+                    return RedirectToAction("Show", new { id });
+                }
+
+
+            }
+            return RedirectToAction("Edit", new { error = objectResult.Value });
+
+        }
+
+
+
+
+
+
+
+
+        // [HttpGet]
+        // public IActionResult Edit(int id, string? error)
+        // {
+        //     ViewData["Error"] = error;
+        //     if (error != null || error != "")
+        //     {
+
+        //         return View();
+        //     }
+        //     ActionResult<Teacher> teacher = _api.FindTeacher(id);
+        //     if (teacher.Result is ObjectResult objectResult && objectResult.Value is Teacher teacherResult)
+        //     {
+        //         ViewData["Teacher"] = teacherResult;
+        //     }
+
+        //     return View();
+        // }
+        // [HttpPost]
+        // public IActionResult Update(int id, string TeacherFName, string TeacherLName, string EmployeeNumber, DateTime TeacherHireDate, decimal TeacherSalary)
+        // {
+        //     Teacher teacher = new Teacher()
+        //     {
+        //         TeacherFName = TeacherFName,
+        //         TeacherLName = TeacherLName,
+        //         EmployeeNumber = EmployeeNumber,
+        //         TeacherHireDate = TeacherHireDate,
+        //         TeacherSalary = TeacherSalary
+
+        //     };
+        //     var updateResult = _api.UpdateTeacher(id, teacher);
+        //     if (updateResult == null) // Assuming `null` is returned when the update fails
+        //     {
+        //         return RedirectToAction("Edit", new { id = id, error = "Failed to update the teacher. Please try again." });
+        //     }
+        //     _api.UpdateTeacher(id, teacher);
+        //     return RedirectToAction("Show", new { id = id });
+        // }
+
+
+        // [HttpGet]
+        // public IActionResult Edit(string? error)
+        // {
+        //     ViewData["Error"] = error;
+        //     return View();
+        // }
+        // [HttpPost]
+        // public IActionResult Update(int id, Teacher NewTeacher)
+        // {
+        //     ActionResult<string> teacher = _api.UpdateTeacher(id, NewTeacher);
+        //     ObjectResult objectResult = teacher.Result as ObjectResult;
+        //     if (objectResult is OkObjectResult)
+        //     {
+        //         var TeacherId = Convert.ToInt32(objectResult.Value);
+        //         return RedirectToAction("Show", new { id = TeacherId });
+
+        //     }
+        //     return RedirectToAction("Edit", new { error = objectResult.Value });
+
+
+        // }
     }
 }

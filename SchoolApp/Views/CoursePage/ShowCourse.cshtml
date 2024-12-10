@@ -5,7 +5,7 @@
     <!-- Displaying the details of the selected courses -->
     @if (Model != null)
     {
-        <h1 class="courses-name">courses Name : <span class="=value">@Model.CourseName </span></h1>
+        <h1 class="courses-name">Course Name : <span class="=value">@Model.CourseName </span></h1>
         <p class="courses-detail">courses Code : <span class="=value">@Model.CourseCode</span></p>
         <p class="courses-detail">Start Date : <span class="=value">@Model.StartDate.ToString("yyyy-M-d")</span></p>
         <p class="courses-detail">End Date : <span class="value">@Model.FinishDate.ToString("yyyy-M-d")</span>
@@ -20,6 +20,7 @@
     }
     <a href="/CoursePage/ListCourse" class="back-button">Back to Course List</a>
     <a class="alert-warning" href="/CoursePage/ConfirmDeleteCourse/@Model.CourseId">Delete Course</a>
+    <a class="edit" href="/CoursePage/EditCourse/@Model.CourseId">Edit Course</a>
 </div>
 
 <style>
@@ -69,7 +70,8 @@
 
 
     .back-button,
-    .alert-warning {
+    .alert-warning,
+    .edit {
         display: inline-block;
         padding: 10px 20px;
         margin-top: 20px;
@@ -80,7 +82,8 @@
     }
 
     .back-button:hover,
-    .alert-warning:hover {
+    .alert-warning:hover,
+    .edit:hover {
         background-color: #0056b3;
     }
 

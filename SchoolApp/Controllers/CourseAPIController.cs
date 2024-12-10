@@ -167,53 +167,108 @@ namespace SchoolApp.Controllers
         /// The details of the course taught by the specified teacher, or a 404 status if not found.
         /// </returns>
 
+        // [HttpGet]
+        // [Route(template: "FindCourseByTeacherId/{id}")]
+        // public ActionResult<Course> FindCourseByTeacherId(int id)
+        // {
+        //     // Created an object SelectedCourse using Course definition defined as Class in Models
+        //     // Initialize as null
+        //     // 'using' keyword is used that will close the connection by itself after executing the code inside
+
+        //     using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+        //     {
+        //         // Opening the Connection
+        //         Connection.Open();
+        //         // Establishing a new query for our database
+        //         MySqlCommand Command = Connection.CreateCommand();
+        //         // @id is replaced with a 'sanitized' (masked) id so that id can be referenced
+        //         // without revealing the actual @id
+        //         Command.CommandText = "select * from courses where teacherId=@id";
+        //         Command.Parameters.AddWithValue("@id", id);
+        //         // Storing the Result Set query in a variable
+        //         using (MySqlDataReader ResultSet = Command.ExecuteReader())
+        //         {
+        //             // While loop is used to loop through each row in the ResultSet
+        //             while (ResultSet.Read())
+        //             {
+        //                 // Accessing the information of Course using the Column name as an index
+        //                 int Id = Convert.ToInt32(ResultSet["courseId"]);
+        //                 string CourseCode = ResultSet["coursecode"].ToString();
+        //                 int TeacherId = Convert.ToInt32(ResultSet["teacherId"]);
+        //                 DateTime StartDate = Convert.ToDateTime(ResultSet["startdate"]);
+        //                 DateTime FinishDate = Convert.ToDateTime(ResultSet["finishdate"]);
+        //                 string CourseName = ResultSet["courseName"].ToString();
+        //                 // Accessing the information of the properties of Course and then assigning it to the short names
+        //                 // created above for all properties of the Course
+        //                 Course SelectedCourse = new Course()
+        //                 {
+        //                     CourseId = Id,
+        //                     CourseCode = CourseCode,
+        //                     TeacherId = TeacherId,
+        //                     StartDate = StartDate,
+        //                     FinishDate = FinishDate,
+        //                     CourseName = CourseName
+        //                 };
+        //                 return Ok(SelectedCourse);
+        //             }
+        //         }
+        //     }
+        //     return NotFound($"Teacher with ID {id} not found.");
+        // }
+
+
+
         [HttpGet]
-        [Route(template: "FindCourseByTeacherId/{id}")]
-        public ActionResult<Course> FindCourseByTeacherId(int id)
+        [Route(template: "FindCoursesByTeacherId/{id}")]
+        public ActionResult<List<Course>> FindCoursesByTeacherId(int id)
         {
-            // Created an object SelectedCourse using Course definition defined as Class in Models
-            // Initialize as null
-            // 'using' keyword is used that will close the connection by itself after executing the code inside
+            // Create a list to store all the courses
+            List<Course> courses = new List<Course>();
+
             using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
             {
-                // Opening the Connection
+                // Open the database connection
                 Connection.Open();
-                // Establishing a new query for our database
+
+                // Create a SQL command to fetch courses for the given teacher ID
                 MySqlCommand Command = Connection.CreateCommand();
-                // @id is replaced with a 'sanitized' (masked) id so that id can be referenced
-                // without revealing the actual @id
-                Command.CommandText = "select * from courses where teacherId=@id";
+                Command.CommandText = "SELECT * FROM courses WHERE teacherId = @id";
                 Command.Parameters.AddWithValue("@id", id);
-                // Storing the Result Set query in a variable
+
+                // Execute the query and process the result set
                 using (MySqlDataReader ResultSet = Command.ExecuteReader())
                 {
-                    // While loop is used to loop through each row in the ResultSet
                     while (ResultSet.Read())
                     {
-                        // Accessing the information of Course using the Column name as an index
-                        int Id = Convert.ToInt32(ResultSet["courseId"]);
-                        string CourseCode = ResultSet["coursecode"].ToString();
-                        int TeacherId = Convert.ToInt32(ResultSet["teacherId"]);
-                        DateTime StartDate = Convert.ToDateTime(ResultSet["startdate"]);
-                        DateTime FinishDate = Convert.ToDateTime(ResultSet["finishdate"]);
-                        string CourseName = ResultSet["courseName"].ToString();
-                        // Accessing the information of the properties of Course and then assigning it to the short names
-                        // created above for all properties of the Course
+                        // Create a new course object for each row in the result set
                         Course SelectedCourse = new Course()
                         {
-                            CourseId = Id,
-                            CourseCode = CourseCode,
-                            TeacherId = TeacherId,
-                            StartDate = StartDate,
-                            FinishDate = FinishDate,
-                            CourseName = CourseName
+                            CourseId = Convert.ToInt32(ResultSet["courseId"]),
+                            CourseCode = ResultSet["coursecode"].ToString(),
+                            TeacherId = Convert.ToInt32(ResultSet["teacherId"]),
+                            StartDate = Convert.ToDateTime(ResultSet["startdate"]),
+                            FinishDate = Convert.ToDateTime(ResultSet["finishdate"]),
+                            CourseName = ResultSet["courseName"].ToString()
                         };
-                        return Ok(SelectedCourse);
+
+                        // Add the course to the list
+                        courses.Add(SelectedCourse);
                     }
                 }
             }
-            return NotFound($"Teacher with ID {id} not found.");
+
+            // Check if the list is empty and return a 404 response if no courses are found
+            if (courses.Count == 0)
+            {
+                return NotFound($"No courses found for Teacher with ID {id}.");
+            }
+
+            // Return the list of courses
+            return Ok(courses);
         }
+
+
+
         /// <summary>
         /// Adds a new course to the database.
         /// </summary>
@@ -346,6 +401,84 @@ namespace SchoolApp.Controllers
                 return Ok($"Course with ID {id} deleted.");
             }
         }
+        [HttpPut(template: "UpdateCourse/{id}")]
+        public ActionResult<string> UpdateCourse(int id, Course courseData)
+        {
+            string pattern = @"^[A-Za-z]{4}\d{4}$";
+            Regex regex = new Regex(pattern);
+            if (courseData.CourseCode == null || courseData.CourseCode == "")
+            {
+                return BadRequest("Course Code is required");
+
+            }
+            if (!regex.IsMatch(courseData.CourseCode))
+            {
+                return BadRequest("Course Code must be in the format of 4letter+4digit");
+            }
+            if (courseData.CourseName == null || courseData.CourseName == "")
+            {
+                return BadRequest("Course Name is required");
+
+            }
+            if (courseData.StartDate > courseData.FinishDate)
+            {
+                return BadRequest("Start Date should be before Finish Date");
+
+            }
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand checkCourseCommand = Connection.CreateCommand();
+                checkCourseCommand.CommandText = "select COUNT(*) from courses where coursecode=@courseCode and courseId!=@id";
+                checkCourseCommand.Parameters.AddWithValue("@courseCode", courseData.CourseCode);
+                checkCourseCommand.Parameters.AddWithValue("@id", id);
+                var courseCount = Convert.ToInt32(checkCourseCommand.ExecuteScalar());
+                if (courseCount > 0)
+                {
+                    return BadRequest("Course with this code already exists");
+
+                }
+                MySqlCommand getTeacherId = Connection.CreateCommand();
+                getTeacherId.CommandText = "select * from courses where teacherid=@teacherId";
+                getTeacherId.Parameters.AddWithValue("@teacherId", courseData.TeacherId);
+                var teacherIdCount = 0;
+                using (MySqlDataReader ResultSet = getTeacherId.ExecuteReader())
+                {
+                    while (ResultSet.Read())
+                    {
+                        teacherIdCount++;
+
+                    }
+                }
+                if (teacherIdCount == 0)
+                {
+                    return BadRequest("Teacher with this id does not exist");
+
+                }
+                MySqlCommand checkCommand = Connection.CreateCommand();
+                checkCommand.CommandText = "select * from courses where courseid=@id";
+                checkCommand.Parameters.AddWithValue("@id", id);
+                MySqlCommand Command = Connection.CreateCommand();
+                Command.CommandText = "UPDATE courses set coursecode=@coursecode, startdate=@startdate, finishdate=@finishdate, coursename=@coursename, teacherid=@teacherid where courseid=@id";
+                Command.Parameters.AddWithValue("@coursecode", courseData.CourseCode);
+                Command.Parameters.AddWithValue("@startdate", courseData.StartDate);
+                Command.Parameters.AddWithValue("@finishdate", courseData.FinishDate);
+                Command.Parameters.AddWithValue("@coursename", courseData.CourseName);
+                Command.Parameters.AddWithValue("@teacherid", courseData.TeacherId);
+                Command.Parameters.AddWithValue("@id", id);
+                var rowsAffected = Command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    return NotFound($"Course with ID {id} not found.");
+
+                }
+                return Ok($"Course with ID {id} updated.");
+            }
+        }
+
+
+
+
 
 
 

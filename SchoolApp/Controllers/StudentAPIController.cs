@@ -259,6 +259,63 @@ namespace SchoolApp.Controllers
                 return Ok($"Student with ID {id} deleted.");
             }
         }
+        [HttpPut(template: "UpdateStudent/{id}")]
+        public ActionResult<string> UpdateStudent(int id, Student studentData)
+        {
+            string pattern = @"^N\d{4}$";
+            Regex regex = new Regex(pattern);
+            if (studentData.StudentFName == null || studentData.StudentLName == null || studentData.StudentFName == "" || studentData.StudentLName == "")
+            {
+                return BadRequest("Please enter a valid name for the student");
+
+            }
+            if (studentData.EnrolDate > DateTime.Today.AddDays(1).AddTicks(-1))
+            {
+                return BadRequest("Please enter a valid enrolment date");
+
+            }
+            if (studentData.StudentNumber == null || studentData.StudentNumber == "")
+            {
+                return BadRequest("Please enter a valid student number");
+            }
+            if (!regex.IsMatch(studentData.StudentNumber))
+            {
+                return BadRequest("Invalid Student Number");
+            }
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand getStudentCommand = Connection.CreateCommand();
+                getStudentCommand.CommandText = "SELECT COUNT(*) FROM students WHERE studentnumber=@number AND studentid!=@id";
+                getStudentCommand.Parameters.AddWithValue("@number", studentData.StudentNumber);
+                getStudentCommand.Parameters.AddWithValue("@id", id);
+                var studentCount = Convert.ToInt32(getStudentCommand.ExecuteScalar());
+                if (studentCount > 0)
+                {
+                    return BadRequest("Student already exists");
+
+                }
+                MySqlCommand checkcommand = Connection.CreateCommand();
+                checkcommand.CommandText = "SELECT * FROM students WHERE studentid=@id";
+                checkcommand.Parameters.AddWithValue("@id", id);
+                MySqlCommand Command = Connection.CreateCommand();
+                Command.CommandText = "UPDATE students set studentfname=@studentfname, studentlname=@studentlname, studentnumber=@studentnumber, enroldate=@enroldate where studentid=@id";
+                Command.Parameters.AddWithValue("@studentfname", studentData.StudentFName);
+                Command.Parameters.AddWithValue("@studentlname", studentData.StudentLName);
+                Command.Parameters.AddWithValue("@studentnumber", studentData.StudentNumber);
+                Command.Parameters.AddWithValue("@enroldate", studentData.EnrolDate);
+                Command.Parameters.AddWithValue("@id", id);
+                var rowsAffected = Command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    return NotFound($"Student with ID {id} not found.");
+
+                }
+                return Ok($"Student with ID {id} updated.");
+            }
+
+
+        }
 
 
     }

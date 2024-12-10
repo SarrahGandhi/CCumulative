@@ -22,6 +22,10 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ291cnNlUGFnZS9Db25maXJtRGVsZXRlQ291cnNlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/CoursePage/EditCourse.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ291cnNlUGFnZS9FZGl0Q291cnNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/CoursePage/ListCourse.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ291cnNlUGFnZS9MaXN0Q291cnNlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -54,6 +58,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3R1ZGVudFBhZ2UvQ29uZmlybURlbGV0ZVN0dWRlbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/StudentPage/EditStudent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3R1ZGVudFBhZ2UvRWRpdFN0dWRlbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/StudentPage/ListStudent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU3R1ZGVudFBhZ2UvTGlzdFN0dWRlbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -68,6 +76,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/TeacherPage/DeleteConfirm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGVhY2hlclBhZ2UvRGVsZXRlQ29uZmlybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/TeacherPage/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGVhY2hlclBhZ2UvRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/sarrahgandhi/Documents/SCHOOL/CCumulative/SchoolApp/Views/TeacherPage/List.cshtml]

@@ -301,5 +301,71 @@ namespace SchoolApp.Controllers
             }
 
         }
+        [HttpPut(template: "UpdateTeacher/{id}")]
+        public ActionResult<string> UpdateTeacher(int id, [FromBody] Teacher teacherData)
+        {
+            string pattern = @"^T\d{3}$"; // ^ and $ ensure the entire string matches
+            Regex regex = new Regex(pattern);
+            // error handling for name
+            if (teacherData.TeacherFName == null || teacherData.TeacherLName == null || teacherData.TeacherFName == "" || teacherData.TeacherLName == "")
+            {
+                return BadRequest("Please provide a valid name for the teacher.");
+            }
+            // error handling for date
+            if (teacherData.TeacherHireDate > DateTime.Today.AddDays(1).AddTicks(-1))
+            {
+                return BadRequest("Future Date not acceptable");
+            }
+            if (teacherData.EmployeeNumber == null || teacherData.EmployeeNumber == "")
+            {
+                return BadRequest("Please provide an Employee Number");
+            }
+            if (!regex.IsMatch(teacherData.EmployeeNumber))
+            {
+                return BadRequest("Invalid Employee Number");
+            }
+            if (teacherData.TeacherSalary <= 0)
+            {
+                return BadRequest("Salary must be greater than 0");
+
+            }
+            using (MySqlConnection Connection = _schoolcontext.AccessDatabase())
+            {
+                Connection.Open();
+                MySqlCommand checkEmployeeNumberCommand = Connection.CreateCommand();
+                checkEmployeeNumberCommand.CommandText = "SELECT COUNT(*) FROM teachers WHERE employeenumber = @employeenumber AND teacherid != @id";
+                checkEmployeeNumberCommand.Parameters.AddWithValue("@employeenumber", teacherData.EmployeeNumber);
+                checkEmployeeNumberCommand.Parameters.AddWithValue("@id", id);
+
+                var existingCount = Convert.ToInt32(checkEmployeeNumberCommand.ExecuteScalar());
+                if (existingCount > 0)
+                {
+                    return BadRequest($"Employee Number '{teacherData.EmployeeNumber}' is already assigned to another teacher.");
+                }
+
+                MySqlCommand checkCommand = Connection.CreateCommand();
+                checkCommand.CommandText = "select * from teachers where teacherid=@id";
+                checkCommand.Parameters.AddWithValue("@id", id);
+
+                MySqlCommand Command = Connection.CreateCommand();
+                Command.CommandText = "UPDATE teachers set teacherfname=@teacherfname, teacherlname=@teacherlname, employeenumber=@employeenumber, hiredate=@hiredate, salary=@salary where teacherid=@id";
+                Command.Parameters.AddWithValue("@teacherfname", teacherData.TeacherFName);
+                Command.Parameters.AddWithValue("@teacherlname", teacherData.TeacherLName);
+                Command.Parameters.AddWithValue("@employeenumber", teacherData.EmployeeNumber);
+                Command.Parameters.AddWithValue("@hiredate", teacherData.TeacherHireDate);
+                Command.Parameters.AddWithValue("@salary", teacherData.TeacherSalary);
+                Command.Parameters.AddWithValue("@id", id);
+                var rowsAffected = Command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    return NotFound($"Teacher with ID {id} not found.");
+                }
+                return Ok($"Teacher with ID {id} updated.");
+            }
+        }
+
+
+
+
     }
 }

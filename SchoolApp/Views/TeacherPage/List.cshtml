@@ -124,21 +124,21 @@
 
     @if (Model != null && Model.Any())
     {
-        <div class="teacher-list">
+            <div class="teacher-list">
             @foreach (var teacher in Model)
             {
-                <div class="teacher-item">
-                    <a href="/TeacherPage/Show/@teacher.TeacherId">@teacher.TeacherFName @teacher.TeacherLName</a>
-                    <span>@teacher.TeacherHireDate.ToString("MM/dd/yyyy")</span>
-                </div>
+                        <div class="teacher-item">
+                            <a href="/TeacherPage/Show/@teacher.TeacherId">@teacher.TeacherFName @teacher.TeacherLName</a>
+                            <span>@teacher.TeacherHireDate.ToString("MM/dd/yyyy")</span>
+                        </div>
             }
-        </div>
+            </div>
     }
     else
     {
-        <div class="error-message">
-            <p>Teachers not Found</p>
-        </div>
+            <div class="error-message">
+                <p>Teachers not Found</p>
+            </div>
     }
 
 </div>

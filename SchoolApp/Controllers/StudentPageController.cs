@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Models;
 
 namespace SchoolApp.Controllers
@@ -136,6 +137,34 @@ namespace SchoolApp.Controllers
             }
             ActionResult<Student> StudentId = _api.DeleteStudent(id);
             return RedirectToAction("ListStudent");
+        }
+        [HttpGet]
+        public IActionResult EditStudent(int id, string? error)
+        {
+            ViewData["Error"] = error;
+            ActionResult<Student> student = _api.FindStudent(id);
+            if (student.Result is ObjectResult objectResult && objectResult.Value is Student studentResult)
+            {
+                ViewData["Student"] = studentResult;
+            }
+            return View();
+        }
+        [HttpPost]
+        public IActionResult UpdateStudent(int id, Student NewStudent)
+        {
+            ActionResult<string> student = _api.UpdateStudent(id, NewStudent);
+            ObjectResult objectResult = student.Result as ObjectResult;
+            if (objectResult is OkObjectResult)
+            {
+                var resultString = objectResult.Value?.ToString();
+                var match = Regex.Match(resultString, @"\d+");
+                if (match.Success)
+                {
+                    var StudentId = Convert.ToInt32(match.Value);
+                    return RedirectToAction("ShowStudent", new { id });
+                }
+            }
+            return RedirectToAction("EditStudent", new { error = objectResult.Value });
         }
     }
 }
