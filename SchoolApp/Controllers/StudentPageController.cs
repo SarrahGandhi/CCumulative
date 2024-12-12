@@ -143,11 +143,13 @@ namespace SchoolApp.Controllers
         {
             ViewData["Error"] = error;
             ActionResult<Student> student = _api.FindStudent(id);
+
             if (student.Result is ObjectResult objectResult && objectResult.Value is Student studentResult)
             {
                 ViewData["Student"] = studentResult;
             }
             return View();
+
         }
         [HttpPost]
         public IActionResult UpdateStudent(int id, Student NewStudent)
@@ -164,7 +166,7 @@ namespace SchoolApp.Controllers
                     return RedirectToAction("ShowStudent", new { id });
                 }
             }
-            return RedirectToAction("EditStudent", new { error = objectResult.Value });
+            return RedirectToAction("EditStudent", new { id, error = objectResult.Value });
         }
     }
 }

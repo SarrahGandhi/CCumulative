@@ -176,7 +176,7 @@ namespace SchoolApp.Controllers
 
 
             }
-            return RedirectToAction("Edit", new { error = objectResult.Value });
+            return RedirectToAction("Edit", new { id, error = objectResult.Value });
 
         }
 
