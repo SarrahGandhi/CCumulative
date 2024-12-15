@@ -148,6 +148,15 @@ namespace SchoolApp.Controllers
             ActionResult<string> TeacherId = _api.DeleteTeacher(id);
             return RedirectToAction("List");
         }
+        /// <summary>
+        /// Handles GET requests to edit a teacher's details.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to edit.</param>
+        /// <param name="error">Optional error message to display.</param>
+        /// <returns>
+        /// The Edit view with the teacher's details, if found.
+        /// Includes error information in ViewData if provided.
+        /// </returns>
         [HttpGet]
         public IActionResult Edit(int id, string? error)
         {
@@ -159,6 +168,15 @@ namespace SchoolApp.Controllers
             }
             return View();
         }
+        /// <summary>
+        /// Handles POST requests to update a teacher's information.
+        /// </summary>
+        /// <param name="id">The ID of the teacher to update.</param>
+        /// <param name="NewTeacher">The updated teacher object containing new data.</param>
+        /// <returns>
+        /// Redirects to the "Show" action if the update is successful.
+        /// Redirects back to the Edit view with an error message if the update fails.
+        /// </returns>
         [HttpPost]
         public IActionResult Update(int id, Teacher NewTeacher)
         {
@@ -180,72 +198,5 @@ namespace SchoolApp.Controllers
 
         }
 
-
-
-
-
-
-
-
-        // [HttpGet]
-        // public IActionResult Edit(int id, string? error)
-        // {
-        //     ViewData["Error"] = error;
-        //     if (error != null || error != "")
-        //     {
-
-        //         return View();
-        //     }
-        //     ActionResult<Teacher> teacher = _api.FindTeacher(id);
-        //     if (teacher.Result is ObjectResult objectResult && objectResult.Value is Teacher teacherResult)
-        //     {
-        //         ViewData["Teacher"] = teacherResult;
-        //     }
-
-        //     return View();
-        // }
-        // [HttpPost]
-        // public IActionResult Update(int id, string TeacherFName, string TeacherLName, string EmployeeNumber, DateTime TeacherHireDate, decimal TeacherSalary)
-        // {
-        //     Teacher teacher = new Teacher()
-        //     {
-        //         TeacherFName = TeacherFName,
-        //         TeacherLName = TeacherLName,
-        //         EmployeeNumber = EmployeeNumber,
-        //         TeacherHireDate = TeacherHireDate,
-        //         TeacherSalary = TeacherSalary
-
-        //     };
-        //     var updateResult = _api.UpdateTeacher(id, teacher);
-        //     if (updateResult == null) // Assuming `null` is returned when the update fails
-        //     {
-        //         return RedirectToAction("Edit", new { id = id, error = "Failed to update the teacher. Please try again." });
-        //     }
-        //     _api.UpdateTeacher(id, teacher);
-        //     return RedirectToAction("Show", new { id = id });
-        // }
-
-
-        // [HttpGet]
-        // public IActionResult Edit(string? error)
-        // {
-        //     ViewData["Error"] = error;
-        //     return View();
-        // }
-        // [HttpPost]
-        // public IActionResult Update(int id, Teacher NewTeacher)
-        // {
-        //     ActionResult<string> teacher = _api.UpdateTeacher(id, NewTeacher);
-        //     ObjectResult objectResult = teacher.Result as ObjectResult;
-        //     if (objectResult is OkObjectResult)
-        //     {
-        //         var TeacherId = Convert.ToInt32(objectResult.Value);
-        //         return RedirectToAction("Show", new { id = TeacherId });
-
-        //     }
-        //     return RedirectToAction("Edit", new { error = objectResult.Value });
-
-
-        // }
     }
 }

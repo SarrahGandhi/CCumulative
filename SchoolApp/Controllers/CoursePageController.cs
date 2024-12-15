@@ -152,6 +152,17 @@ namespace SchoolApp.Controllers
             ActionResult<string> CourseId = _api.DeleteCourse(id);
             return RedirectToAction("ListCourse");
         }
+        /// <summary>
+        /// Displays the Edit Course view with the current course details.
+        /// </summary>
+        /// <param name="id">The unique identifier of the course to be edited.</param>
+        /// <param name="error">
+        /// An optional error message to display on the view if any issue occurs during the process.
+        /// </param>
+        /// <returns>
+        /// Returns the EditCourse view with the course details populated in ViewData.
+        /// If an error occurs, the error message is also passed to the view.
+        /// </returns>
         [HttpGet]
         public IActionResult EditCourse(int id, string? error)
         {
@@ -163,6 +174,21 @@ namespace SchoolApp.Controllers
             }
             return View();
         }
+        /// <summary>
+        /// Updates the details of an existing course and redirects to the ShowCourse view if successful.
+        /// </summary>
+        /// <param name="id">The unique identifier of the course being updated.</param>
+        /// <param name="NewCourse">
+        /// A Course object containing the updated course details, such as:
+        ///     - Course Name
+        ///     - Course Code
+        ///     - Credits, etc.
+        /// </param>
+        /// <returns>
+        /// Redirects to:
+        /// - ShowCourse action if the update is successful.
+        /// - EditCourse action with an error message if the update fails.
+        /// </returns>
         [HttpPost]
         public IActionResult UpdateCourse(int id, Course NewCourse)
         {
@@ -178,7 +204,7 @@ namespace SchoolApp.Controllers
                     return RedirectToAction("ShowCourse", new { id });
                 }
             }
-            return RedirectToAction("EditCourse", new { error = objectResult.Value });
+            return RedirectToAction("EditCourse", new { id, error = objectResult.Value });
         }
 
     }

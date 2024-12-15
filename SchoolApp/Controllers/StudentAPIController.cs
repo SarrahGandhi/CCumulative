@@ -259,6 +259,23 @@ namespace SchoolApp.Controllers
                 return Ok($"Student with ID {id} deleted.");
             }
         }
+        /// <summary>
+        /// Updates the details of an existing student in the database.
+        /// </summary>
+        /// <param name="id">The unique identifier of the student to be updated.</param>
+        /// <param name="studentData">
+        /// A Student object containing the updated information, including:
+        ///     - First Name
+        ///     - Last Name
+        ///     - Student Number (must match the format N####)
+        ///     - Enrolment Date (cannot be a future date)
+        /// </param>
+        /// <returns>
+        /// Returns an ActionResult containing:
+        ///     - 200 OK if the update is successful.
+        ///     - 400 BadRequest for invalid input (e.g., invalid name, date, or duplicate student number).
+        ///     - 404 NotFound if no student with the specified ID exists.
+        /// </returns>
         [HttpPut(template: "UpdateStudent/{id}")]
         public ActionResult<string> UpdateStudent(int id, Student studentData)
         {

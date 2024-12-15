@@ -401,6 +401,23 @@ namespace SchoolApp.Controllers
                 return Ok($"Course with ID {id} deleted.");
             }
         }
+        /// <summary>
+        /// Updates the details of an existing course in the database.
+        /// </summary>
+        /// <param name="id">The unique identifier of the course to be updated.</param>
+        /// <param name="courseData">
+        /// A Course object containing the updated details of the course, including:
+        /// - CourseCode: A 4-letter and 4-digit unique code (e.g., ABCD1234).
+        /// - CourseName: The name of the course.
+        /// - StartDate: The start date of the course.
+        /// - FinishDate: The finish date of the course.
+        /// - TeacherId: The ID of the assigned teacher.
+        /// </param>
+        /// <returns>
+        /// - **200 OK**: If the course was successfully updated.
+        /// - **400 Bad Request**: If validation fails (e.g., invalid CourseCode, dates, or missing teacher ID).
+        /// - **404 Not Found**: If no course exists with the specified ID.
+        /// </returns>
         [HttpPut(template: "UpdateCourse/{id}")]
         public ActionResult<string> UpdateCourse(int id, Course courseData)
         {

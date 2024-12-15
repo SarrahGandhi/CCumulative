@@ -301,6 +301,23 @@ namespace SchoolApp.Controllers
             }
 
         }
+        /// <summary>
+        /// Updates an existing teacher's information in the database.
+        /// </summary>
+        /// <param name="id">The unique identifier of the teacher to be updated.</param>
+        /// <param name="teacherData">A Teacher object containing updated information such as:
+        ///     - First Name
+        ///     - Last Name
+        ///     - Employee Number (must match the T### format)
+        ///     - Hire Date (cannot be a future date)
+        ///     - Salary (must be greater than 0)
+        /// </param>
+        /// <returns>
+        /// Returns an ActionResult containing:
+        ///     - 200 OK if the update is successful.
+        ///     - 400 BadRequest for invalid inputs (e.g., invalid name, salary, date, or employee number).
+        ///     - 404 NotFound if no teacher with the specified ID exists.
+        /// </returns>
         [HttpPut(template: "UpdateTeacher/{id}")]
         public ActionResult<string> UpdateTeacher(int id, [FromBody] Teacher teacherData)
         {

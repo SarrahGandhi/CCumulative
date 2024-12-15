@@ -138,6 +138,15 @@ namespace SchoolApp.Controllers
             ActionResult<Student> StudentId = _api.DeleteStudent(id);
             return RedirectToAction("ListStudent");
         }
+        /// <summary>
+        /// Displays the Edit Student view with the student's current details.
+        /// </summary>
+        /// <param name="id">The unique identifier of the student to be edited.</param>
+        /// <param name="error">An optional error message to display on the view if any issue occurs.</param>
+        /// <returns>
+        /// Returns the EditStudent view with student details populated in ViewData. 
+        /// If an error occurs, the error message is passed to the view.
+        /// </returns>
         [HttpGet]
         public IActionResult EditStudent(int id, string? error)
         {
@@ -151,6 +160,16 @@ namespace SchoolApp.Controllers
             return View();
 
         }
+        /// <summary>
+        /// Updates the student's information and redirects to the ShowStudent view if successful.
+        /// </summary>
+        /// <param name="id">The unique identifier of the student being updated.</param>
+        /// <param name="NewStudent">A Student object containing the updated student details.</param>
+        /// <returns>
+        /// Redirects to:
+        /// - ShowStudent action if the update is successful.
+        /// - EditStudent action with an error message if the update fails.
+        /// </returns>
         [HttpPost]
         public IActionResult UpdateStudent(int id, Student NewStudent)
         {
